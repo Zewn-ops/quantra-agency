@@ -73,6 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (fromSource === 'web-dev' || fromSource === 'web-dev-final') {
             thankYouBackBtn.textContent = '← Back to Web Development';
             thankYouBackBtn.onclick = () => { window.location.href = '/web-dev'; };
+        } else if (fromSource === 'design' || fromSource === 'design-final' || fromSource === 'design-retainer') {
+            thankYouBackBtn.textContent = '← Back to Branding & Design';
+            thankYouBackBtn.onclick = () => { window.location.href = '/design'; };
         } else {
             thankYouBackBtn.textContent = '← Back to Home';
             thankYouBackBtn.onclick = () => { window.location.href = '/'; };
@@ -131,7 +134,26 @@ document.addEventListener('DOMContentLoaded', () => {
         conveyclear:{ prompt: ">_ Executing: load_client_profile.sh --target='ConveyClear'", text: "" },
         margie:     { prompt: ">_ Executing: load_client_profile.sh --target='Margie'", text: "" },
         spxd:       { prompt: ">_ Executing: load_client_profile.sh --target='SPXD'", text: "" },
-        gekko:      { prompt: ">_ Executing: load_client_profile.sh --target='Gekko'", text: "" }
+        gekko:      { prompt: ">_ Executing: load_client_profile.sh --target='Gekko'", text: "" },
+
+        // --- DESIGN: Feature Cards ---
+        memorable: { prompt: ">_ Executing: identity_protocol.sh", text: "Distinctive marks designed to outlive trends.<br><br>We don't chase what's hot this year — we design identities built on timeless principles of contrast, balance, and meaning. Your brand should still look right in five years." },
+        scalable:  { prompt: ">_ Executing: vector_export.sh", text: "Every mark we build is vector-first.<br><br>That means it works at 16px on a favicon and at 16 metres on a billboard, without ever pixelating. We deliver every format you'll ever need — SVG, PNG, PDF, AI — so you're never stuck." },
+        strategic: { prompt: ">_ Executing: brand_strategy.exe", text: "Beautiful design without strategy is just decoration.<br><br>Before we open Illustrator, we map your business goals, your audience's gut reactions, and what your competitors are already doing. Then we design the thing that cuts through." },
+        ondemand:  { prompt: ">_ Executing: queue_design_request.js", text: "Design shouldn't be a panic.<br><br>Our retainer plans give you a dedicated designer on call. Submit a request, we deliver in 24-48 hours. Cancel anytime. It's design as a subscription — flat fee, no surprises." },
+
+        // --- DESIGN: 3-Tier Cards ---
+        logo_lite:      { prompt: ">_ Executing: init_logo_lite.sh", text: "The starter package. 2-3 logo concepts, 2 rounds of revisions, all the file formats you'll need, plus a basic color palette and font pairing.<br><br>Designed for solopreneurs who need to start trading and look credible doing it. Quick turnaround, sharp result." },
+        brand_identity: { prompt: ">_ Executing: deploy_brand_identity.sh", text: "Logo + extended variations (horizontal, stacked, monochrome), full brand guidelines PDF, business cards, email signatures.<br><br>For businesses that need to look credible across every touchpoint — proposals, meetings, press, packaging. The full kit." },
+        full_brand:     { prompt: ">_ Executing: scale_full_brand.exe", text: "Everything in the Brand Identity tier, plus social media template kits, pitch deck templates, print-ready signage, and a 1-page brand strategy document.<br><br>Built for launches, rebrands, and businesses scaling fast across multiple channels at once." },
+
+        // --- DESIGN: Tools ---
+        illustrator: { prompt: ">_ Executing: launch_illustrator.ai", text: "Adobe Illustrator is our vector workhorse — it's where every logo, icon, and infinitely scalable identity element lives. Industry standard for a reason." },
+        photoshop:   { prompt: ">_ Executing: launch_photoshop.psd", text: "Photoshop handles the pixel-level work — composites, photo retouching, complex social graphics, and anything where raster meets vector." },
+        indesign:    { prompt: ">_ Executing: launch_indesign.indd", text: "InDesign is where multi-page documents come to life — brand guidelines, pitch decks, brochures, magazines. Print-ready, properly typeset, no compromises." },
+        affinity:    { prompt: ">_ Executing: launch_affinity.afdesign", text: "Affinity Designer is our nimble alternative for vector work — fast, powerful, and a fresh take when Adobe feels heavy. Great for rapid concept exploration." },
+        procreate:   { prompt: ">_ Executing: launch_procreate.ipad", text: "Procreate on iPad is where rough concepts get sketched fast. Hand-drawn marks, illustrative ideas, anything that benefits from getting away from the cursor." },
+        canva:       { prompt: ">_ Executing: launch_canva.web", text: "Canva is the right tool for one specific job: handing clients editable templates they can update themselves. We build the master, they do the variations." }
     };
 
     if (featureCards.length > 0 && featureModal) {
@@ -201,6 +223,23 @@ document.addEventListener('DOMContentLoaded', () => {
         web_launch: {
             prompt: ">_ Executing: deploy_to_client_hosting.sh",
             text: "We deploy your site on *your* hosting—you own all your assets and domains.<br><br>From there, we transition into a monthly Care Plan where we handle all updates, security patches, and minor changes so your site stays healthy, fast, and secure while you focus on running your business.",
+            tint: 'modal-step-purple'
+        },
+
+        // --- DESIGN: Process Steps ---
+        design_discovery: {
+            prompt: ">_ Executing: brand_discovery.sh",
+            text: "The discovery phase isn't a kickoff call — it's the foundation. You'll fill out a deep brand questionnaire covering your business, your audience, and what you want people to feel when they see your mark.<br><br>We'll also map your competition so we know what NOT to look like. By the end, we have a clear creative direction before any design work starts. No guesswork.",
+            tint: 'modal-step-green'
+        },
+        design_concepts: {
+            prompt: ">_ Executing: generate_concepts.exe",
+            text: "We come back with 2-3 distinct concept directions — not minor variations of the same idea, but genuinely different approaches. You pick the one that resonates.<br><br>From there, 2 rounds of focused revisions to refine the chosen direction. We don't do design-by-committee. Clear feedback, decisive iterations, no endless tweaking. The brief is locked when you approve.",
+            tint: 'modal-step-blue'
+        },
+        design_launch: {
+            prompt: ">_ Executing: deliver_brand_assets.sh",
+            text: "You get the works — every file format you'll ever need (PNG, SVG, PDF, AI), full brand guidelines documenting how your identity should be used, and source files in case your future designer needs them.<br><br>From there, you can roll into a retainer for ongoing design work, or just disappear into the sunset with your beautiful new brand. Both are fine.",
             tint: 'modal-step-purple'
         }
     };
