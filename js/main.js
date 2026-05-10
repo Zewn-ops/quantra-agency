@@ -76,6 +76,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (fromSource === 'design' || fromSource === 'design-final' || fromSource === 'design-retainer') {
             thankYouBackBtn.textContent = '← Back to Branding & Design';
             thankYouBackBtn.onclick = () => { window.location.href = '/design'; };
+        } else if (fromSource === 'it-support') {
+            thankYouBackBtn.textContent = '← Back to IT Support';
+            thankYouBackBtn.onclick = () => { window.location.href = '/support'; };
         } else {
             thankYouBackBtn.textContent = '← Back to Home';
             thankYouBackBtn.onclick = () => { window.location.href = '/'; };
@@ -83,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 6. FEATURE MODAL (feature cards, infra cards, logo tickers) ---
-    const featureCards = document.querySelectorAll('.feature-card, .infra-card, .clickable-logo');
+    const featureCards = document.querySelectorAll('.feature-card, .infra-card, .tier-card, .clickable-logo');
     const featureModal = document.getElementById('feature-modal');
     const closeFeatureBtn = document.getElementById('close-feature-modal');
     const termText = document.getElementById('modal-term-text');
@@ -153,7 +156,21 @@ document.addEventListener('DOMContentLoaded', () => {
         indesign:    { prompt: ">_ Executing: launch_indesign.indd", text: "InDesign is where multi-page documents come to life — brand guidelines, pitch decks, brochures, magazines. Print-ready, properly typeset, no compromises." },
         affinity:    { prompt: ">_ Executing: launch_affinity.afdesign", text: "Affinity Designer is our nimble alternative for vector work — fast, powerful, and a fresh take when Adobe feels heavy. Great for rapid concept exploration." },
         procreate:   { prompt: ">_ Executing: launch_procreate.ipad", text: "Procreate on iPad is where rough concepts get sketched fast. Hand-drawn marks, illustrative ideas, anything that benefits from getting away from the cursor." },
-        canva:       { prompt: ">_ Executing: launch_canva.web", text: "Canva is the right tool for one specific job: handing clients editable templates they can update themselves. We build the master, they do the variations." }
+        canva:       { prompt: ">_ Executing: launch_canva.web", text: "Canva is the right tool for one specific job: handing clients editable templates they can update themselves. We build the master, they do the variations." },
+
+        // --- IT SUPPORT: Service Tiers ---
+        support_lite: {
+            prompt: "Lite plan &mdash; for small ongoing fixes",
+            text: "5 support tasks per month, with a 48-hour turnaround on most requests.<br><br>This tier is built for business owners who don't need much help, but when they do, they want someone reliable. Spreadsheet fixes, document templates, getting that printer working, sorting out email &mdash; the stuff that piles up when you don't have an IT person.<br><br>Cancel any time. No annual contracts."
+        },
+        support_standard: {
+            prompt: "Standard plan &mdash; where most clients live",
+            text: "12 support tasks per month, with a 24-hour turnaround.<br><br>Everything in Lite, plus we'll set up software for you (CRMs, accounting tools, project management apps), build automated reports, and create small workflows that save you hours every week.<br><br>This is the sweet spot for most businesses. Enough capacity to actually move things forward, without paying for capacity you won't use."
+        },
+        support_pro: {
+            prompt: "Pro plan &mdash; your IT department on retainer",
+            text: "Unlimited tasks (queue-based, one at a time), same-day turnaround on simple things, plus direct WhatsApp access during business hours.<br><br>This tier is for business owners who want tech to stop being a thing they think about. Includes large data migrations, more complex automations, and the kind of \"can you just sort this out\" support that means you never need to Google how to do something again.<br><br>Cancel any time. No annual contracts."
+        }
     };
 
     if (featureCards.length > 0 && featureModal) {
@@ -175,7 +192,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         paraText.style.display = 'block';
                         paraText.innerHTML = modalContent[modalId].text;
                     }
-                    modalIcon.setAttribute('src', cardIcon);
+                    if (cardIcon) {
+                        modalIcon.setAttribute('src', cardIcon);
+                        modalIcon.style.display = 'block';
+                    } else {
+                        modalIcon.setAttribute('src', '');
+                        modalIcon.style.display = 'none';
+                    }
                     featureModal.classList.add('active');
                 }
             });

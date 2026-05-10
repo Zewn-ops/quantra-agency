@@ -1,6 +1,7 @@
 {
   "rewrites": [
     { "source": "/design", "destination": "/pages/design.html" },
+    { "source": "/support", "destination": "/pages/support.html" },
     { "source": "/web-dev", "destination": "/pages/web-dev.html" },
     { "source": "/contact", "destination": "/pages/contact.html" },
     { "source": "/thank-you", "destination": "/pages/thank-you.html" },
