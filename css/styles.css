@@ -34,7 +34,7 @@ body {
     -webkit-backdrop-filter: blur(10px);
 }
 
-/* --- 3. HAMBURGER MENU --- */
+/* - 3. HAMBURGER MENU - */
 .hamburger {
     display: flex;
     flex-direction: column;
