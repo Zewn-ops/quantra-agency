@@ -1,0 +1,12 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/web-dev",   "destination": "/pages/web-dev.html" },
+    { "source": "/contact",   "destination": "/pages/contact.html" },
+    { "source": "/thank-you", "destination": "/pages/thank-you.html" },
+    { "source": "/privacy",   "destination": "/pages/privacy.html" },
+    { "source": "/terms",     "destination": "/pages/terms.html" },
+    { "source": "/cookies",   "destination": "/pages/cookies.html" }
+  ]
+}

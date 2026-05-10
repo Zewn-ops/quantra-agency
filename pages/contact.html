@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/assets/brand/icon-logo.svg">
+    <title>Book a Call | Quantra Digital Agency</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@300;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="logo">
+            <img src="/assets/brand/QuantraDigital_Logo_Full.svg" alt="Quantra Logo" class="logo-img">
+        </div>
+        <button class="nav-btn nav-back-btn" onclick="history.length > 1 ? history.back() : window.location.href='/'">&#8592; Back</button>
+    </nav>
+
+    <div class="side-menu-overlay"></div>
+    <div class="side-menu">
+        <div class="side-menu-header">
+            <span class="terminal-title">root@quantra:~#</span>
+            <button class="close-menu-btn">&times;</button>
+        </div>
+        <div class="side-menu-links">
+            <a href="/" class="terminal-link">
+                <span class="prompt">&gt;_</span> <span class="link-text">Home</span>
+            </a>
+            <a href="/web-dev" class="terminal-link">
+                <span class="prompt">&gt;_</span> <span class="link-text">Web Development</span>
+            </a>
+            <div class="terminal-link disabled">
+                <span class="prompt">&gt;_</span> <span class="link-text">Automation<span class="blink">_</span></span>
+            </div>
+            <a href="/contact?from=menu" class="terminal-link active-link">
+                <span class="prompt">&gt;_</span> <span class="link-text">Book a Call</span>
+            </a>
+        </div>
+    </div>
+
+    <section class="form-section">
+        <div class="form-card" id="contact-form-container">
+            <div class="form-header">
+                <h2 class="empower-light">book your</h2>
+                <h2 class="empower-bold"><span class="brand-green">systems audit</span> >_</h2>
+                <p>Drop your details below. We'll reach out within 24 hours to schedule your zero-pressure discovery call.</p>
+                <span class="source-indicator">// source: <span id="form-source-display">direct</span></span>
+            </div>
+
+            <form id="contact-form">
+                <input type="hidden" name="source" id="form-source" value="direct">
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <input type="text" id="name" placeholder=" " required>
+                        <label for="name">Your Name</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" id="email" placeholder=" " required>
+                        <label for="email">Work Email</label>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <input type="text" id="company" placeholder=" " required>
+                    <label for="company">Company Name</label>
+                </div>
+
+                <div class="input-group">
+                    <textarea id="bottleneck" rows="4" placeholder=" " required></textarea>
+                    <label for="bottleneck">What is your biggest workflow bottleneck?</label>
+                </div>
+
+                <button type="submit" class="large-cta-btn form-submit-btn">Request Audit</button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="footer-section">
+        <div class="footer-card">
+            <img src="/assets/brand/QuantraDigital_Logo_Full.svg" alt="Quantra Logo" class="footer-logo">
+            <p class="footer-bio">If we are a fit, I will map out a custom "Digital Systems Plan" for your business. You get a clear, visual flowchart of how this customized blueprint transforms your business operations and integrates your core systems for visual clarity.</p>
+            <div class="footer-middle">
+                <div class="footer-terminal">
+                    <p>&gt; PING: ALL SYSTEMS OPERATIONAL &lt;</p>
+                    <p>LATENCY: [<span id="live-latency" class="brand-green">23</span>ms] MS</p>
+                    <p>BASED IN <span id="live-location" class="brand-green">LOADING...</span> - Local Time: <span id="live-time" class="brand-green">00:00</span></p>
+                </div>
+                <div class="footer-centerpiece">
+                    <img src="/assets/brand/icon-logo.svg" alt="Spinning Logo" class="spin-logo">
+                </div>
+                <div class="footer-socials">
+                    <a href="https://github.com/Zewn-ops" target="_blank" class="social-icon">
+                        <img src="/assets/social/icon-github.svg" alt="GitHub">
+                    </a>
+                    <a href="https://www.instagram.com/quantra.digital/" target="_blank" class="social-icon">
+                        <img src="/assets/social/icon-instagram.svg" alt="Instagram">
+                    </a>
+                    <a href="https://www.linkedin.com/company/quantratech-digital-agency" target="_blank" class="social-icon">
+                        <img src="/assets/social/icon-linkedin.svg" alt="LinkedIn">
+                    </a>
+                    <a href="https://www.youtube.com/@QuantraDigital" target="_blank" class="social-icon">
+                        <img src="/assets/social/icon-youtube.svg" alt="YouTube">
+                    </a>
+                </div>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Quantra. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="/cookies">Cookies Settings</a>
+                    <a href="/terms">Terms of Service</a>
+                    <a href="/privacy">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>
