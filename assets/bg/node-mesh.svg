@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="560" viewBox="0 0 800 560" fill="none">
+  <!-- Quantra technical node-mesh motif (original asset). Evokes "invisible
+       automation" (connected nodes / workflow graph). Faint backdrop for sharp
+       heroes only; overall opacity + fade mask applied in CSS. -->
+  <g stroke="#81FFA5" stroke-width="1.2" stroke-opacity="0.55">
+    <line x1="120" y1="90"  x2="300" y2="60"/>
+    <line x1="300" y1="60"  x2="520" y2="140"/>
+    <line x1="520" y1="140" x2="700" y2="90"/>
+    <line x1="120" y1="90"  x2="220" y2="260"/>
+    <line x1="300" y1="60"  x2="220" y2="260"/>
+    <line x1="300" y1="60"  x2="440" y2="300"/>
+    <line x1="520" y1="140" x2="440" y2="300"/>
+    <line x1="520" y1="140" x2="640" y2="320"/>
+    <line x1="700" y1="90"  x2="640" y2="320"/>
+    <line x1="220" y1="260" x2="440" y2="300"/>
+    <line x1="220" y1="260" x2="120" y2="440"/>
+    <line x1="440" y1="300" x2="360" y2="480"/>
+    <line x1="440" y1="300" x2="640" y2="320"/>
+    <line x1="640" y1="320" x2="560" y2="500"/>
+    <line x1="640" y1="320" x2="720" y2="460"/>
+    <line x1="120" y1="440" x2="360" y2="480"/>
+    <line x1="360" y1="480" x2="560" y2="500"/>
+    <line x1="560" y1="500" x2="720" y2="460"/>
+  </g>
+  <g fill="#81FFA5">
+    <circle cx="120" cy="90"  r="3.5"/>
+    <circle cx="520" cy="140" r="3.5"/>
+    <circle cx="700" cy="90"  r="3.5"/>
+    <circle cx="220" cy="260" r="3.5"/>
+    <circle cx="360" cy="480" r="3.5"/>
+    <circle cx="560" cy="500" r="3.5"/>
+    <circle cx="120" cy="440" r="3.5"/>
+    <circle cx="720" cy="460" r="3.5"/>
+  </g>
+  <!-- hub nodes -->
+  <g fill="#81FFA5">
+    <circle cx="300" cy="60"  r="5.5"/>
+    <circle cx="440" cy="300" r="5.5"/>
+    <circle cx="640" cy="320" r="5.5"/>
+  </g>
+  <g fill="none" stroke="#81FFA5" stroke-width="1" stroke-opacity="0.4">
+    <circle cx="300" cy="60"  r="11"/>
+    <circle cx="440" cy="300" r="11"/>
+    <circle cx="640" cy="320" r="11"/>
+  </g>
+</svg>

@@ -1,8 +1,9 @@
 {
   "rewrites": [
+    { "source": "/automation", "destination": "/pages/automation.html" },
     { "source": "/design", "destination": "/pages/design.html" },
-    { "source": "/support", "destination": "/pages/support.html" },
     { "source": "/web-dev", "destination": "/pages/web-dev.html" },
+    { "source": "/about", "destination": "/pages/about.html" },
     { "source": "/contact", "destination": "/pages/contact.html" },
     { "source": "/thank-you", "destination": "/pages/thank-you.html" },
     { "source": "/privacy", "destination": "/pages/privacy.html" },

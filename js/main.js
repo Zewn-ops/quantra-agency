@@ -1,3 +1,9 @@
+// Contact-form delivery endpoint = same-origin Vercel serverless function
+// (api/contact.js → Resend email + optional Discord). See docs/CONTACT_FORM.md.
+// If it errors (e.g. RESEND_API_KEY not set yet) the catch below falls back to
+// mailto so a lead is never silently lost. Empty string => mailto-only.
+const CONTACT_ENDPOINT = '/api/contact';
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log("Quantra Systems: Online");
 
@@ -42,28 +48,95 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const fromSource = urlParams.get('from') || 'direct';
 
-    // --- 4. CONTACT FORM ---
+    // friendly label for the contact page ("// booking about: Web Development")
+    const sourceLabel = (s) => {
+        if (/^web-dev/.test(s))    return 'Web Development';
+        if (/^design/.test(s))     return 'Branding & Design';
+        if (/^automation/.test(s)) return 'Automation';
+        if (/^about/.test(s))      return 'About';
+        return 'your project';   // home*, menu, policy, direct
+    };
+
+    // --- 4. CONTACT FORM (POST to CONTACT_ENDPOINT; honeypot + status states) ---
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
         const formSourceInput = document.getElementById('form-source');
         const formSourceDisplay = document.getElementById('form-source-display');
+        const statusEl = document.getElementById('form-status');
+        const submitBtn = contactForm.querySelector('.form-submit-btn');
+        const honeypot = document.getElementById('company_url');
+        const FALLBACK_EMAIL = 'zuaan@quantratech.co.za';
 
         if (formSourceInput) formSourceInput.value = fromSource;
-        if (formSourceDisplay) formSourceDisplay.textContent = fromSource;
+        if (formSourceDisplay) formSourceDisplay.textContent = sourceLabel(fromSource);
 
-        contactForm.addEventListener('submit', (e) => {
+        // build status text safely (textContent + DOM nodes, never innerHTML)
+        const setStatus = (text, type, link) => {
+            if (!statusEl) return;
+            statusEl.className = 'form-status' + (type ? ' form-status--' + type : '');
+            statusEl.textContent = text;
+            if (link) {
+                const a = document.createElement('a');
+                a.href = link.href;          // mailto with encodeURIComponent'd values
+                a.textContent = link.label;
+                statusEl.appendChild(a);
+                if (link.after) statusEl.appendChild(document.createTextNode(link.after));
+            }
+        };
+        const mailtoFallback = (p) => 'mailto:' + FALLBACK_EMAIL +
+            '?subject=' + encodeURIComponent('Website enquiry from ' + p.name) +
+            '&body=' + encodeURIComponent(
+                'Name: ' + p.name + '\nEmail: ' + p.email + '\nCompany: ' + p.company +
+                '\nSource: ' + p.source + '\n\nBottleneck:\n' + p.bottleneck);
+
+        contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const source = formSourceInput ? formSourceInput.value : 'direct';
-            console.log('Form submission:', {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                company: document.getElementById('company').value,
-                bottleneck: document.getElementById('bottleneck').value,
-                source
-            });
-            // TODO: integrate form backend (Formspree / Vercel function / etc.)
-            // TODO: Consider changing bottleneck question based on source (e.g. "What's your biggest web challenge?" if from=web-dev)
-            window.location.href = '/thank-you?from=' + encodeURIComponent(source);
+
+            // honeypot: bots fill the hidden field -> silently accept, don't tip them off
+            if (honeypot && honeypot.value.trim() !== '') {
+                window.location.href = '/thank-you?from=' +
+                    encodeURIComponent(formSourceInput ? formSourceInput.value : 'direct');
+                return;
+            }
+
+            const payload = {
+                name: document.getElementById('name').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                company: document.getElementById('company').value.trim(),
+                bottleneck: document.getElementById('bottleneck').value.trim(),
+                source: formSourceInput ? formSourceInput.value : 'direct',
+                company_url: honeypot ? honeypot.value.trim() : ''   // server-side honeypot too
+            };
+            if (!payload.name || !payload.email || !payload.company || !payload.bottleneck) {
+                setStatus('Please fill in all the fields.', 'error');
+                return;
+            }
+
+            // endpoint not wired yet -> email fallback so the lead is never lost
+            if (!CONTACT_ENDPOINT) {
+                setStatus('Opening your email app… or write to ', 'error',
+                    { href: mailtoFallback(payload), label: FALLBACK_EMAIL, after: '.' });
+                window.location.href = mailtoFallback(payload);
+                return;
+            }
+
+            const original = submitBtn ? submitBtn.textContent : '';
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending…'; }
+            setStatus('Sending…', null);
+
+            try {
+                const res = await fetch(CONTACT_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                window.location.href = '/thank-you?from=' + encodeURIComponent(payload.source);
+            } catch (err) {
+                if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = original; }
+                setStatus("Sorry, that didn't send. Please email us at ", 'error',
+                    { href: mailtoFallback(payload), label: FALLBACK_EMAIL, after: '.' });
+            }
         });
     }
 
@@ -76,9 +149,12 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (fromSource === 'design' || fromSource === 'design-final' || fromSource === 'design-retainer') {
             thankYouBackBtn.textContent = '← Back to Branding & Design';
             thankYouBackBtn.onclick = () => { window.location.href = '/design'; };
-        } else if (fromSource === 'it-support') {
-            thankYouBackBtn.textContent = '← Back to IT Support';
-            thankYouBackBtn.onclick = () => { window.location.href = '/support'; };
+        } else if (fromSource === 'automation' || fromSource === 'automation-mid' || fromSource === 'automation-final') {
+            thankYouBackBtn.textContent = '← Back to Automation';
+            thankYouBackBtn.onclick = () => { window.location.href = '/automation'; };
+        } else if (fromSource === 'about' || fromSource === 'about-mid' || fromSource === 'about-final') {
+            thankYouBackBtn.textContent = '← Back to About';
+            thankYouBackBtn.onclick = () => { window.location.href = '/about'; };
         } else {
             thankYouBackBtn.textContent = '← Back to Home';
             thankYouBackBtn.onclick = () => { window.location.href = '/'; };
@@ -285,6 +361,88 @@ document.addEventListener('DOMContentLoaded', () => {
         processModal.addEventListener('click', (e) => {
             if (e.target === processModal) processModal.classList.remove('active');
         });
+    }
+
+    // --- 8. PARALLAX NODE LAYERS (Section 24 bg; only runs where .parallax-node exists) ---
+    const parallaxNodes = document.querySelectorAll('.parallax-node');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (parallaxNodes.length && !reduceMotion) {
+        let ticking = false;
+        const update = () => {
+            const y = window.scrollY || window.pageYOffset || 0;
+            parallaxNodes.forEach(node => {
+                const speed = parseFloat(node.dataset.speed) || 0; // negative = faster than scroll
+                const base = node.dataset.tf || '';
+                node.style.transform = `translate3d(0, ${(y * speed).toFixed(1)}px, 0) ${base}`;
+            });
+            ticking = false;
+        };
+        window.addEventListener('scroll', () => {
+            if (!ticking) { ticking = true; requestAnimationFrame(update); }
+        }, { passive: true });
+        update(); // set initial offset
+    }
+
+    // --- shared: reduced-motion + IntersectionObserver support ---
+    const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const hasIO = 'IntersectionObserver' in window;
+
+    // --- 9. SCROLL REVEAL (fade/slide-in on enter; no HTML changes needed) ---
+    if (hasIO && !prefersReduce) {
+        document.documentElement.classList.add('js-reveal');
+        const revealSel = [
+            '.warm-card', '.service-card', '.why-item', '.stats-section',
+            '.infra-card', '.feature-card', '.process-step-card', '.slider-card',
+            '.empower-left', '.empower-right', '.services-heading', '.why-heading',
+            '.infra-header', '.process-header', '.final-cta-container',
+            '.tier-card', '.soft-step-card', '.help-example', '.faq-item'
+        ].join(', ');
+        const revealEls = document.querySelectorAll(revealSel);
+        revealEls.forEach(el => el.classList.add('reveal'));
+        const revealIO = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                const el = entry.target;
+                // light stagger among siblings sharing a parent
+                const sibs = el.parentElement
+                    ? Array.from(el.parentElement.children).filter(c => c.classList.contains('reveal'))
+                    : [el];
+                const i = Math.max(0, sibs.indexOf(el));
+                el.style.transitionDelay = (i * 80) + 'ms';
+                el.classList.add('is-visible');
+                obs.unobserve(el);
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+        revealEls.forEach(el => revealIO.observe(el));
+    }
+
+    // --- 10. STAT COUNTERS (count up when the stat strip scrolls into view) ---
+    const counters = document.querySelectorAll('.stat-num[data-count]');
+    if (counters.length) {
+        const runCount = (el) => {
+            const target = parseInt(el.dataset.count, 10) || 0;
+            const suffix = el.dataset.suffix || '';
+            const dur = 1200, start = performance.now();
+            const tick = (now) => {
+                const p = Math.min((now - start) / dur, 1);
+                const eased = 1 - Math.pow(1 - p, 3);
+                el.textContent = Math.round(eased * target) + suffix;
+                if (p < 1) requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+        };
+        if (hasIO && !prefersReduce) {
+            const countIO = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    runCount(entry.target);
+                    obs.unobserve(entry.target);
+                });
+            }, { threshold: 0.5 });
+            counters.forEach(c => countIO.observe(c));
+        } else {
+            counters.forEach(c => { c.textContent = (c.dataset.count || '') + (c.dataset.suffix || ''); });
+        }
     }
 
 }); // DOMContentLoaded

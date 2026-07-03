@@ -1,3 +1,5 @@
+@import url('tokens.css');
+
 /* --- 0. CSS CUSTOM PROPERTIES --- */
 :root {
     --brand-green: #81FFA5;
@@ -15,9 +17,14 @@
     font-family: 'Inter', sans-serif;
 }
 
-body {
+html {
     background-color: var(--bg-dark);
+}
+
+body {
+    background-color: transparent; /* ambient bg layers (Section 24) show through */
     color: white;
+    position: relative; /* positioning context for .parallax-bg (Section 24) */
 }
 
 /* --- 2. NAVIGATION BAR --- */
@@ -106,7 +113,7 @@ body {
     justify-content: center;
     padding: 120px 20px 80px 20px;
     text-align: center;
-    background: radial-gradient(circle at top, rgba(20, 30, 80, 0.5) 0%, transparent 50%);
+    background: radial-gradient(circle at top, var(--hero-glow) 0%, transparent 50%);
 }
 
 .hero-content {
@@ -114,6 +121,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative; /* sit above the sharp-hero node motif (Section 24) */
+    z-index: 1;
 }
 
 .hero-title-light {
@@ -258,7 +267,7 @@ body {
 
 .feature-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(129, 255, 165, 0.05);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(var(--brand-green-rgb), 0.05);
 }
 
 /* Border base */
@@ -279,12 +288,12 @@ body {
 /* Shimmer gradients */
 .border-green::before {
     background: linear-gradient(135deg,
-        rgba(129, 255, 165, 1) 0%,
-        rgba(129, 255, 165, 1) 17%,
-        rgba(129, 255, 165, 0.3) 34%,
-        rgba(129, 255, 165, 1) 53%,
-        rgba(129, 255, 165, 1) 75%,
-        rgba(129, 255, 165, 0.3) 100%
+        rgba(var(--brand-green-rgb), 1) 0%,
+        rgba(var(--brand-green-rgb), 1) 17%,
+        rgba(var(--brand-green-rgb), 0.3) 34%,
+        rgba(var(--brand-green-rgb), 1) 53%,
+        rgba(var(--brand-green-rgb), 1) 75%,
+        rgba(var(--brand-green-rgb), 0.3) 100%
     );
 }
 
@@ -503,7 +512,7 @@ body {
 
 .infra-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(129, 255, 165, 0.05);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(var(--brand-green-rgb), 0.05);
 }
 
 .infra-card::before {
@@ -1060,7 +1069,9 @@ body {
 .process-card::before,
 .footer-card::before,
 .form-card::before,
-.policy-card::before {
+.policy-card::before,
+.warm-card::before,
+.service-card::before {
     background-size: 200% 200%;
     animation: fluidGradient 4s ease-in-out infinite;
 }
@@ -1785,13 +1796,432 @@ body {
     font-style: italic;
 }
 
-/* --- 24. MOBILE RESPONSIVENESS --- */
+/* --- 24. AMBIENT BACKGROUND SYSTEM --- */
+/* Bespoke layered page background (design ref: Bitwarden — clean, purposeful,
+   dark, intentional). Pure-CSS fixed layers on <body> so all 9 pages inherit it
+   with zero per-file markup. The dot mesh + glow blooms are brand-wide ambient
+   texture (not a sharp-only component) so they hold the two-aesthetic rule; the
+   technical node motif is scoped to sharp heroes only. No build / vanilla. */
+
+/* Layer 1 — fine dot mesh tiled across the viewport, faded toward the bottom */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    background-image: url('/assets/bg/dot-grid.svg');
+    background-size: 32px 32px;
+    opacity: 0.35;
+    -webkit-mask-image: radial-gradient(120% 90% at 50% 0%, #000 0%, rgba(0,0,0,0.45) 55%, transparent 100%);
+            mask-image: radial-gradient(120% 90% at 50% 0%, #000 0%, rgba(0,0,0,0.45) 55%, transparent 100%);
+}
+
+/* Layer 2 — soft brand-colour glow blooms (green / blue / indigo) */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        radial-gradient(55% 45% at 15% 10%, rgba(129, 255, 165, 0.06) 0%, transparent 60%),
+        radial-gradient(50% 45% at 85% 16%, rgba(66, 134, 244, 0.05) 0%, transparent 60%),
+        radial-gradient(70% 55% at 50% 108%, rgba(92, 76, 168, 0.06) 0%, transparent 60%);
+}
+
+/* Layer 3 — technical node-mesh motif, sharp heroes only (not the soft support hero) */
+.hero-section:not(.hero-section--soft) {
+    position: relative;
+    overflow: hidden;
+}
+.hero-section:not(.hero-section--soft)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0; /* above the hero's radial-gradient base, below .hero-content (z-index 1) */
+    pointer-events: none;
+    background-image: url('/assets/bg/node-mesh.svg');
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: 1100px auto;
+    opacity: 0.22;
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 88%);
+            mask-image: linear-gradient(180deg, #000 0%, transparent 88%);
+}
+
+/* Layer 4 — parallax node motifs hosted INSIDE transparent sections (same trick
+   as the hero motif, so section backgrounds never cover them). Each .has-parallax
+   section is its own stacking context; the node sits at z-index 0 behind the
+   section's content (which is raised to z-index 1) and is clipped to the section.
+   js/main.js drifts each node FASTER than scroll (negative data-speed). */
+.has-parallax {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+.has-parallax > .parallax-node {
+    position: absolute;
+    z-index: 0;           /* behind section content (raised below), above section bg */
+    width: 820px;
+    height: 574px;        /* node-mesh.svg native ratio 800×560 */
+    background-image: url('/assets/bg/node-mesh.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    pointer-events: none;
+    will-change: transform;
+}
+/* raise every other (real content) child above the node */
+.has-parallax > *:not(.parallax-node) {
+    position: relative;
+    z-index: 1;
+}
+/* base transforms below are mirrored in data-tf on the markup so JS can compose
+   them with the scroll translate */
+.parallax-node--a {
+    top: -60px;
+    right: -130px;
+    opacity: 0.32;
+    transform: rotate(8deg) scale(1.15);
+}
+.parallax-node--b {
+    bottom: -80px;
+    left: -150px;
+    opacity: 0.28;
+    transform: scaleX(-1) rotate(-12deg) scale(1.35);
+}
+
+/* --- 25. HOME (VISION) PAGE --- */
+/* Vision-led home: warm/soft narrative blocks blended into the dark technical
+   shell. Sharp sections keep >_ + green; the human sections (.warm-card) use the
+   soft aesthetic (1px borders, gentle radii, no >_). */
+
+/* hero CTA row (primary button + secondary scroll link) */
+.hero-cta-row {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.hero-secondary-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: color var(--transition-soft);
+}
+.hero-secondary-link:hover { color: var(--brand-green); }
+
+/* warm narrative blocks (soft aesthetic) */
+.warm-section {
+    padding: 90px 24px;
+    display: flex;
+    justify-content: center;
+}
+.warm-card {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+    width: 100%;
+    text-align: center;
+    background: rgba(10, 14, 23, 0.4);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    border-radius: 28px;
+    padding: 60px 52px;
+}
+/* glass shimmer border — same system as service cards, slightly softer so the
+   home/about narrative blocks read as a touch distinct from the service pages */
+.warm-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 28px;
+    padding: 1.5px;
+    background-image: linear-gradient(135deg,
+        rgba(var(--accent-rgb), 0.8) 0%,
+        rgba(var(--accent-rgb), 0.25) 30%,
+        rgba(255, 255, 255, 0.5) 55%,
+        rgba(var(--accent-rgb), 0.25) 75%,
+        rgba(var(--accent-rgb), 0.8) 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: -1;
+}
+.warm-eyebrow {
+    display: block;
+    color: var(--brand-green);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+.warm-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 34px;
+    line-height: 1.2;
+    color: #fff;
+    margin-bottom: 22px;
+}
+.warm-body {
+    color: var(--text-muted);
+    font-size: var(--text-body-lg);
+    line-height: 1.65;
+}
+.warm-card--promise {
+    background: rgba(129, 255, 165, 0.03);
+    border-color: rgba(129, 255, 165, 0.18);
+}
+.warm-card--promise .warm-title { font-size: 40px; }
+
+/* services spread (anchor cards → service pages) */
+.services-section { padding: 100px 40px; }
+.services-inner { max-width: 1200px; margin: 0 auto; }
+.services-heading { text-align: center; margin-bottom: 56px; }
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+.service-card {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    background: rgba(10, 14, 23, 0.4);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    border-radius: var(--radius-infra-card);
+    padding: 38px 32px;
+    transition: transform var(--transition-sharp),
+                box-shadow var(--transition-sharp);
+}
+.service-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-infra-card);
+    padding: 2px;
+    background-image: linear-gradient(135deg,
+        rgba(var(--accent-rgb), 1) 0%,
+        rgba(var(--accent-rgb), 1) 17%,
+        rgba(var(--accent-rgb), 0.3) 34%,
+        rgba(255, 255, 255, 0.8) 53%,
+        rgba(var(--accent-rgb), 1) 75%,
+        rgba(var(--accent-rgb), 0.3) 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: -1;
+}
+.service-card:hover {
+    transform: var(--hover-lift-sharp);
+    box-shadow: var(--shadow-sharp-hover);
+}
+.service-card-icon { width: 48px; height: 48px; margin-bottom: 24px; }
+.service-card-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 24px;
+    color: #fff;
+    margin-bottom: 14px;
+}
+.service-card-text {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    flex-grow: 1;
+}
+.service-card-arrow {
+    margin-top: 26px;
+    color: var(--brand-green);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* why one team — numbered (01/02/03) */
+.why-section { padding: 100px 40px; }
+.why-inner { max-width: 1100px; margin: 0 auto; }
+.why-heading { text-align: center; margin-bottom: 64px; }
+.why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 44px;
+}
+.why-num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 1;
+    color: var(--num-color);
+    margin-bottom: 20px;
+}
+.why-item-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 20px;
+    color: #fff;
+    margin-bottom: 12px;
+}
+.why-item-text {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+}
+
+/* proof tagline under the client ticker */
+.proof-tagline {
+    text-align: center;
+    color: var(--text-dimmer);
+    font-size: var(--text-sm);
+    margin-top: 28px;
+}
+
+/* --- 25b. SCROLL REVEAL + STAT STRIP (global animations) --- */
+/* Reveal only hides content when JS is active (html.js-reveal), so no-JS and
+   reduced-motion users see everything immediately. js/main.js Section 9 adds the
+   .reveal class + toggles .is-visible via IntersectionObserver. */
+html.js-reveal .reveal {
+    opacity: 0;
+    transform: translateY(26px);
+}
+html.js-reveal .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+                transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* animated stat strip */
+.stats-section { padding: 80px 40px; }
+.stats-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    text-align: center;
+}
+.stat-item { padding: 18px 12px; }
+.stat-num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 54px;
+    line-height: 1;
+    color: var(--brand-green);
+    font-variant-numeric: tabular-nums;
+}
+.stat-label {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    margin-top: 14px;
+}
+
+/* contact form — honeypot + status message */
+.hp-field {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+.form-status {
+    margin-top: 18px;
+    text-align: center;
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    min-height: 1.2em;
+}
+.form-status--error { color: #ff8a8a; }
+.form-status--success { color: var(--brand-green); }
+.form-status a { color: var(--brand-green); text-decoration: underline; }
+.form-submit-btn:disabled { opacity: 0.6; cursor: default; }
+
+/* --- 27. PER-SERVICE ACCENT + DISTINCT HEROES --- */
+/* Each service page carries <body class="svc-*">. These re-tint the shared sharp
+   components (already refactored to var(--accent-rgb)): card shimmer borders, hover
+   glow, hero radial glow + node-motif. Brand chrome (logo/nav/footer) stays green;
+   home/about have no svc-* class so they default to the green accent. Mapping:
+   automation=green, web-dev=blue, design=purple. */
+
+body.svc-automation {                 /* green (brand) — greener hero so it reads != web-dev */
+    --accent: var(--brand-green);
+    --accent-rgb: var(--brand-green-rgb);
+    --hero-glow: rgba(18, 56, 40, 0.55);
+    --hero-node-filter: none;
+}
+body.svc-web-dev {                    /* blue */
+    --accent: #4286f4;
+    --accent-rgb: 66, 134, 244;
+    --hero-glow: rgba(20, 42, 96, 0.62);
+    --hero-node-filter: hue-rotate(85deg) saturate(1.15);
+}
+body.svc-design {                     /* purple (brightened from process-purple for dark-bg contrast) */
+    --accent: #8a6dff;
+    --accent-rgb: 138, 109, 255;
+    --hero-glow: rgba(42, 22, 70, 0.6);
+    --hero-node-filter: hue-rotate(120deg) saturate(1.2);
+}
+
+/* per-service hero node-motif: tint + a distinct treatment each
+   (web-dev denser/sharper, design softer/dreamier — fits a branding page) */
+.svc-automation .hero-section:not(.hero-section--soft)::after,
+.svc-web-dev .hero-section:not(.hero-section--soft)::after,
+.svc-design  .hero-section:not(.hero-section--soft)::after {
+    filter: var(--hero-node-filter);
+}
+.svc-web-dev .hero-section:not(.hero-section--soft)::after {
+    opacity: 0.26;
+    background-size: 980px auto;
+}
+.svc-design .hero-section:not(.hero-section--soft)::after {
+    opacity: 0.16;
+    background-size: 1280px auto;
+}
+
+/* hero-highlight pill adopts the service accent (web-dev/design) */
+.svc-web-dev .hero-highlight,
+.svc-design .hero-highlight {
+    background: linear-gradient(90deg, rgba(var(--accent-rgb), 0.9), rgba(var(--accent-rgb), 0.55));
+}
+
+/* --- 26. MOBILE RESPONSIVENESS --- */
 @media (max-width: 768px) {
 
     html, body {
         overflow-x: hidden;
         width: 100%;
     }
+
+    /* Ambient background (Section 24): lighter on mobile for perf + fit */
+    body::before { opacity: 0.25; }
+    .hero-section:not(.hero-section--soft)::after {
+        background-size: 720px auto;
+        opacity: 0.18;
+    }
+    .has-parallax > .parallax-node { width: 520px; height: 364px; }
+    .parallax-node--a { right: -90px; opacity: 0.24; }
+    .parallax-node--b { left: -110px; opacity: 0.20; }
+
+    /* Home (vision) page — stack grids, tighten warm cards */
+    .service-grid, .why-grid { grid-template-columns: 1fr; }
+    .stats-inner { grid-template-columns: repeat(2, 1fr); gap: 32px 16px; }
+    .stat-num { font-size: 44px; }
+    .stats-section { padding: 60px 20px; }
+    .services-section, .why-section { padding: 70px 20px; }
+    .warm-section { padding: 60px 18px; }
+    .warm-card { padding: 40px 26px; }
+    .warm-title { font-size: 28px; }
+    .warm-card--promise .warm-title { font-size: 30px; }
+    .hero-cta-row { gap: 18px; margin-top: 32px; }
 
     section, .policy-section, .form-section {
         padding: 60px 20px !important;

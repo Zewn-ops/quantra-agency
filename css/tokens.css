@@ -1,0 +1,121 @@
+/* ============================================================
+   QUANTRA DESIGN TOKENS
+   Single source of truth for all reusable values.
+   Import this file first, before styles.css.
+   ============================================================ */
+
+:root {
+
+    /* --- BRAND COLOURS --- */
+    --brand-green: #81FFA5;
+    --brand-green-rgb: 129, 255, 165;       /* for rgba() use */
+
+    /* --- BACKGROUNDS --- */
+    --bg-dark: #0A0E17;
+    --bg-side-menu: #0D121D;
+    --bg-tint-pledge: rgba(129, 255, 165, 0.015);
+
+    /* Process card tints */
+    --bg-card-green:  #152B1B;
+    --bg-card-blue:   #000061;
+    --bg-card-purple: #2A1635;
+
+    /* --- TEXT --- */
+    --text-light:  #e0e0e0;
+    --text-muted:  #a0a0a0;
+    --text-dimmer: #808080;
+
+    /* --- BORDERS --- */
+    --border-subtle: rgba(255, 255, 255, 0.1);
+
+    /* --- BUTTON GRADIENTS --- */
+    --gradient-btn-start: #4286f4;
+    --gradient-btn-end:   #00ff9d;
+    --gradient-cta-start: #5c4ca8;
+
+    /* Shimmer gradient for hamburger + misc accents */
+    --gradient-blue-purple-start: #4b6cb7;
+    --gradient-blue-purple-end:   #5c4ca8;
+
+    /* --- PER-SERVICE ACCENT (design system) ---
+       Default = brand green. A service page sets these on <body class="svc-*">,
+       so the shared sharp components (card shimmer borders, hover glow, hero
+       glow + node motif) re-tint per service while brand chrome stays green.
+       Mapping: automation=green, web-dev=blue, design=purple. */
+    --accent:      var(--brand-green);
+    --accent-rgb:  var(--brand-green-rgb);
+    --hero-glow:   rgba(20, 30, 80, 0.5);   /* default blue hero radial */
+    --hero-node-filter: none;                /* hue-rotate/sat on the hero node motif */
+
+    /* Numbered callout (01/02/03) — design-system component, brightened 2026-06-30 */
+    --num-color:   rgba(129, 255, 165, 0.80);   /* was 0.28 → 0.55 → 0.80 */
+
+    /* --- BORDER RADII: SHARP AESTHETIC --- */
+    --radius-feature-card: 32px;
+    --radius-modal:        32px;
+    --radius-infra-card:   24px;
+    --radius-process-card: 24px;
+    --radius-form-card:    32px;
+    --radius-policy-card:  24px;
+    --radius-slider-card:  42px;
+    --radius-footer-card:  42px;
+    --radius-nav-btn:      30px;
+    --radius-large-cta:    40px;
+
+    /* --- BORDER RADII: SOFT AESTHETIC --- */
+    --radius-tier-card:       20px;
+    --radius-soft-step-card:  20px;
+    --radius-help-example:    16px;
+    --radius-faq-item:        14px;
+    --radius-terminal-link:   16px;
+
+    /* --- TRANSITIONS: SHARP AESTHETIC --- */
+    --transition-sharp: 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    --transition-modal: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    --transition-menu:  0.4s cubic-bezier(0.25, 1, 0.5, 1);
+
+    /* --- TRANSITIONS: SOFT AESTHETIC --- */
+    --transition-soft:  0.3s ease;
+
+    /* --- HOVER EFFECTS: SHARP --- */
+    --hover-lift-sharp: translateY(-8px);
+    --shadow-sharp-hover: 0 20px 40px rgba(0, 0, 0, 0.5),
+                          0 0 20px rgba(129, 255, 165, 0.05);
+
+    /* --- HOVER EFFECTS: SOFT --- */
+    --hover-lift-soft: translateY(-4px);
+    --shadow-soft-hover: 0 12px 30px rgba(0, 0, 0, 0.3);
+
+    /* --- SPACING --- */
+    --section-padding-v:      120px;
+    --section-padding-v-soft: 100px;
+    --section-padding-h:      40px;
+    --section-padding-h-mobile: 20px;
+
+    /* --- TYPOGRAPHY --- */
+    --font-display: 'Montserrat', sans-serif;
+    --font-body:    'Inter', sans-serif;
+    --font-mono:    monospace;
+
+    --text-hero:    64px;
+    --text-display: 56px;
+    --text-card-title: 36px;
+    --text-body-lg: 20px;
+    --text-body:    18px;
+    --text-sm:      16px;
+    --text-xs:      14px;
+    --text-mono-sm: 13px;
+
+    /* --- Z-INDEX SCALE --- */
+    --z-navbar:     100;
+    --z-modal:      99999;
+    --z-menu:       9999;
+    --z-overlay:    9998;
+
+    /* --- ANIMATION DURATIONS --- */
+    --anim-gradient:   4s;
+    --anim-btn:        1.5s;
+    --anim-scroll:     40s;
+    --anim-spin:       8s;
+    --anim-blink:      1s;
+}
