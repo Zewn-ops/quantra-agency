@@ -3,6 +3,52 @@
 Running log of meaningful changes. Newest entries at the top.
 Format each entry as: ## YYYY-MM-DD — short title, then bullet points.
 
+## 2026-07-10 — SITE WENT LIVE + /contact upgraded to a real contact page
+
+Two things this session: the big refresh batch finally shipped to production, then `/contact` was
+rebuilt as a proper contact page.
+
+- **🚀 LIVE.** The `feature/site-refresh-contact-form` batch (06-27 + 06-30 + 07-03 work) merged to
+  `main` (`7dca03b..58c4acf`) → Vercel auto-deployed. **quantratech.co.za now runs the new site.**
+  Smoke-tested live: all 10 routes 200, unknown paths 404, sitemap/robots/OG image serve, all 6
+  design-page tool logos resolve, `/api/contact` returns 405 on GET (= function deployed and running).
+- **`/support` → `/automation` 308 redirect** added to `vercel.json` (`redirects` key). The IT-Support
+  page was deleted in the refresh but was live + indexed. Verified on production.
+- **Git transport fix:** `origin` was an HTTPS URL with no credential helper and no `gh` installed, so
+  non-interactive pushes failed with `could not read Username`. Repointed to
+  `git@github.com:Zewn-ops/quantra-agency.git` (SSH key already authorised as `Zewn-ops`). Zewn ran the
+  repoint himself — Claude's classifier blocks agent-initiated remote repoints, correctly.
+- **Vercel preview deployments are behind Deployment Protection** — every request 302s to
+  `vercel.com/sso-api` and lands on a login page, so `curl` sees a Vercel login screen, not the site.
+  **Reusable: smoke-test previews through a logged-in browser, not curl.** Production is unprotected.
+
+**`/contact` rebuilt (branch `feature/contact-page`):** was a bare "book your systems audit" form card
+with no hero and no phone/email anywhere on the entire site.
+
+- **Hero added** ("Let's talk about what you're **building**.") + a **3-card contact strip**: phone
+  `066 065 3047` (`tel:+27660653047`), email `info@quantratech.co.za` (`mailto:`), and a static
+  "Based in Johannesburg" card. Sharp aesthetic — 24px radii, `translateY(-8px)` + green glow on the
+  two link cards, no hover on the static one. Inline stroke SVGs for the icons (the `/assets/icons/`
+  set is full-colour illustration, wrong register for a UI affordance).
+- **Form generalised:** header `send us a message >_`, submit `Send Message`, textarea label
+  `How can we help?`, source indicator `// enquiry about:`. **`company` is now optional** — a general
+  enquiry shouldn't force a company name. Relaxed in three places: the `required` attr, the client-side
+  guard in `main.js`, and the server-side check in `api/contact.js`. Blank company renders as
+  `(not given)` in the lead email + Discord ping.
+- **`info@` everywhere:** `FALLBACK_EMAIL` in `js/main.js` and the `LEADS_TO` default in
+  `api/contact.js` both moved off `zuaan@` → `info@quantratech.co.za` (keeps a personal address out of
+  client-side JS). **⚠️ The `LEADS_TO` env var in Vercel still points at `zuaan@` — env beats the code
+  default, so update it in the dashboard or leads keep landing in the personal inbox.**
+- **ContactPage JSON-LD** added (Organization + ContactPoint with phone/email/locality).
+- **Verified:** `node --check` on both JS files; HTML well-formed + JSON-LD parses; handler unit-tested
+  against a stubbed `fetch` — no-company→200, missing name/email/message→400, honeypot→200-and-sends-
+  nothing, GET→405, no key→500 (mailto fallback intact). Rendered at 1440px in a real browser.
+  ⚠️ **Mobile stacking written but NOT visually verified** (the automation tab wouldn't reflow on
+  resize) — eyeball `/contact` on a phone.
+- **⏳ Still open (non-blocking):** (1) automation hero pill is still blue→purple — Section 27's accent
+  override names only `.svc-web-dev`/`.svc-design`, never `.svc-automation`. (2) Umami has no tracking
+  script on the site. (3) Stale footer-bio on 8 inner pages.
+
 ## 2026-07-03 — fixed 6 broken design-page tool logos + staged the whole batch on a feature branch
 
 - **Bug:** the `/design` "tools we use" ticker referenced 6 logos that didn't exist

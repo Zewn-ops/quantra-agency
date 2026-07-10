@@ -4,7 +4,7 @@
 //
 // Env vars (set in Vercel → Project → Settings → Environment Variables):
 //   RESEND_API_KEY        (required) — from resend.com
-//   LEADS_TO              (optional) — where leads land. default zuaan@quantratech.co.za
+//   LEADS_TO              (optional) — where leads land. default info@quantratech.co.za
 //   LEADS_FROM            (optional) — verified sender. default "Quantra Leads <leads@quantratech.co.za>"
 //   DISCORD_LEADS_WEBHOOK (optional) — a Discord channel webhook URL for a lead ping
 //
@@ -45,26 +45,27 @@ module.exports = async function handler(req, res) {
   // honeypot: a bot filled the hidden field — pretend success, send nothing
   if (honeypot !== '') return res.status(200).json({ ok: true });
 
-  if (!name || !email || !company || !bottleneck) {
+  if (!name || !email || !bottleneck) {
     return res.status(400).json({ ok: false, error: 'missing fields' });
   }
 
   const RESEND_API_KEY = process.env.RESEND_API_KEY;
-  const LEADS_TO = process.env.LEADS_TO || 'zuaan@quantratech.co.za';
+  const LEADS_TO = process.env.LEADS_TO || 'info@quantratech.co.za';
   const LEADS_FROM = process.env.LEADS_FROM || 'Quantra Leads <leads@quantratech.co.za>';
   if (!RESEND_API_KEY) return res.status(500).json({ ok: false, error: 'email not configured' });
 
+  const companyOut = company || '(not given)';
   const subject = `New website lead: ${name} (${source})`;
   const text =
     `New lead from the Quantra site\n\n` +
-    `Name: ${name}\nEmail: ${email}\nCompany: ${company}\nSource (page): ${source}\n\n` +
+    `Name: ${name}\nEmail: ${email}\nCompany: ${companyOut}\nSource (page): ${source}\n\n` +
     `Message:\n${bottleneck}\n`;
   const html =
     `<h2 style="font-family:sans-serif">New website lead</h2>` +
     `<p style="font-family:sans-serif;line-height:1.6">` +
     `<strong>Name:</strong> ${esc(name)}<br>` +
     `<strong>Email:</strong> <a href="mailto:${esc(email)}">${esc(email)}</a><br>` +
-    `<strong>Company:</strong> ${esc(company)}<br>` +
+    `<strong>Company:</strong> ${esc(companyOut)}<br>` +
     `<strong>Source (page):</strong> ${esc(source)}</p>` +
     `<p style="font-family:sans-serif;line-height:1.6"><strong>Message:</strong><br>${esc(bottleneck).replace(/\n/g, '<br>')}</p>`;
 
@@ -90,7 +91,7 @@ module.exports = async function handler(req, res) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          content: `🟢 New lead — **${name}** / ${company} / ${email} · source \`${source}\`\n> ${bottleneck.slice(0, 400)}`,
+          content: `🟢 New lead — **${name}** / ${companyOut} / ${email} · source \`${source}\`\n> ${bottleneck.slice(0, 400)}`,
         }),
       });
     } catch (e) { /* non-fatal */ }

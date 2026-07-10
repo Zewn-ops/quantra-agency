@@ -2193,6 +2193,80 @@ body.svc-design {                     /* purple (brightened from process-purple 
     background: linear-gradient(90deg, rgba(var(--accent-rgb), 0.9), rgba(var(--accent-rgb), 0.55));
 }
 
+/* --- 28. CONTACT PAGE (hero + phone/email/location strip) --- */
+.contact-info-section {
+    display: flex;
+    justify-content: center;
+    padding: 0 40px 20px;
+}
+
+.contact-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1000px;
+    width: 100%;
+}
+
+.contact-info-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 32px 24px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-infra-card);
+    background: rgba(255, 255, 255, 0.02);
+    text-align: center;
+    text-decoration: none;
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+                border-color 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+                box-shadow 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+a.contact-info-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(var(--accent-rgb), 0.4);
+    box-shadow: 0 12px 40px rgba(var(--accent-rgb), 0.12);
+}
+
+.contact-info-icon {
+    width: 28px;
+    height: 28px;
+    color: var(--brand-green);
+    margin-bottom: 6px;
+}
+
+.contact-info-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dimmer);
+}
+
+.contact-info-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--text-light);
+    word-break: break-word;
+}
+
+a.contact-info-card:hover .contact-info-value {
+    color: var(--brand-green);
+}
+
+/* the "Based in" card isn't a link — no hover affordance */
+.contact-info-card--static {
+    cursor: default;
+}
+
+.label-optional {
+    color: var(--text-dimmer);
+    font-size: 0.85em;
+}
+
 /* --- 26. MOBILE RESPONSIVENESS --- */
 @media (max-width: 768px) {
 
@@ -2473,4 +2547,15 @@ body.svc-design {                     /* purple (brightened from process-purple 
     .faq-question { font-size: 15px !important; }
 
     .final-cta-section--soft { padding: 80px 20px !important; }
+
+    .contact-info-section { padding: 0 20px 10px !important; }
+
+    .contact-info-grid {
+        grid-template-columns: 1fr !important;
+        gap: 14px !important;
+    }
+
+    .contact-info-card { padding: 24px 20px !important; }
+
+    .contact-info-value { font-size: 16px !important; }
 }

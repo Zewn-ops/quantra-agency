@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const statusEl = document.getElementById('form-status');
         const submitBtn = contactForm.querySelector('.form-submit-btn');
         const honeypot = document.getElementById('company_url');
-        const FALLBACK_EMAIL = 'zuaan@quantratech.co.za';
+        const FALLBACK_EMAIL = 'info@quantratech.co.za';
 
         if (formSourceInput) formSourceInput.value = fromSource;
         if (formSourceDisplay) formSourceDisplay.textContent = sourceLabel(fromSource);
@@ -86,8 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const mailtoFallback = (p) => 'mailto:' + FALLBACK_EMAIL +
             '?subject=' + encodeURIComponent('Website enquiry from ' + p.name) +
             '&body=' + encodeURIComponent(
-                'Name: ' + p.name + '\nEmail: ' + p.email + '\nCompany: ' + p.company +
-                '\nSource: ' + p.source + '\n\nBottleneck:\n' + p.bottleneck);
+                'Name: ' + p.name + '\nEmail: ' + p.email +
+                '\nCompany: ' + (p.company || '(not given)') +
+                '\nSource: ' + p.source + '\n\nMessage:\n' + p.bottleneck);
 
         contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -107,8 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 source: formSourceInput ? formSourceInput.value : 'direct',
                 company_url: honeypot ? honeypot.value.trim() : ''   // server-side honeypot too
             };
-            if (!payload.name || !payload.email || !payload.company || !payload.bottleneck) {
-                setStatus('Please fill in all the fields.', 'error');
+            if (!payload.name || !payload.email || !payload.bottleneck) {
+                setStatus('Please fill in your name, email, and message.', 'error');
                 return;
             }
 
