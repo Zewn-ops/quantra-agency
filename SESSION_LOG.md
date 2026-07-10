@@ -3,6 +3,24 @@
 Running log of meaningful changes. Newest entries at the top.
 Format each entry as: ## YYYY-MM-DD — short title, then bullet points.
 
+## 2026-07-10 (fix) — side menu reopened itself after Back (bfcache) — `fix/menu-open-after-back`
+
+- **Bug (Zewn found):** open the side menu → click a link → on the next page hit Back → **the menu is
+  open again.** Reported from `/contact`'s `.nav-back-btn` (`history.back()`), but it affects Back from
+  anywhere.
+- **Cause: the back/forward cache.** The menu's open state is nothing but `.active` classes on
+  `.side-menu` + `.side-menu-overlay`. bfcache freezes and restores the DOM **verbatim** — it does not
+  re-run `DOMContentLoaded` — so a menu left open when you navigate away comes back open. Nothing in
+  `main.js` ever cleared it.
+- **Fix (`js/main.js` §1):** `window.addEventListener('pagehide', closeMenu)` strips the classes before
+  the page is frozen, and `pageshow` + `e.persisted` closes it again on a restore, belt-and-braces.
+- **⚠️ Could NOT reproduce under claude-in-chrome:** Chrome **disables bfcache while a debugger is
+  attached**, and the extension attaches one — so the automated tab can never hit the bug. Also **the
+  local preview server sends `Cache-Control: no-store`, which alone disqualifies a page from bfcache**;
+  production sends `public, max-age=0, must-revalidate` and IS eligible. Verified the fix instead by
+  dispatching real `PageTransitionEvent`s: open/close still work; `pagehide` → closed; persisted
+  `pageshow` → closed; non-persisted `pageshow` → untouched (correct, the `e.persisted` guard).
+
 ## 2026-07-10 (last) — removed the "Coming Soon" side-menu placeholder (branch `feature/remove-coming-soon`)
 
 - Deleted the disabled `<div class="terminal-link disabled">Coming Soon</div>` from the side menu on

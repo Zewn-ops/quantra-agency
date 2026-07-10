@@ -24,6 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         closeBtn.addEventListener('click', closeMenu);
         overlay.addEventListener('click', closeMenu);
+
+        // The back/forward cache restores the DOM verbatim, so a menu left open when the
+        // visitor navigated away reappears open when they hit Back. Close it on the way
+        // out, and again on a restored pageshow in case the page was frozen some other way.
+        window.addEventListener('pagehide', closeMenu);
+        window.addEventListener('pageshow', (e) => { if (e.persisted) closeMenu(); });
     }
 
     // --- 2. FOOTER TERMINAL ---
