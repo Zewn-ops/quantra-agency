@@ -3,6 +3,38 @@
 Running log of meaningful changes. Newest entries at the top.
 Format each entry as: ## YYYY-MM-DD — short title, then bullet points.
 
+## 2026-07-10 (later) — per-page footer bios + FAQ sections on 6 pages (branch `feature/footer-faq`)
+
+- **🔴 Fixed the stale footer-bio bug** (open since 06-30). 8 of 10 pages carried a leftover CTA
+  paragraph — *"If we are a fit, I will map out a custom Digital Systems Plan…"* — in the footer bio
+  slot. It wasn't a bio, and it was the only **first-person singular** copy on a site that otherwise
+  says "we". Every page now has its **own** bio, written in the established voice (second person,
+  no jargon, "with you", "you own it", em-dashes): home/about/web-dev/design/automation/contact/
+  thank-you each get a page-specific line; the 3 legal pages share one neutral line.
+- **FAQ sections added to 6 pages** (home 5 Q, web-dev 5, automation 5, design 4, about 4, contact 4),
+  placed directly above the footer. **Deliberately NOT on** privacy/terms/cookies (noise under a legal
+  policy) or thank-you (terminal page, one job).
+  - Reused the **existing `.faq-*` CSS** (Section 19) left behind by the deleted IT-Support page —
+    native `<details>`/`<summary>`, so **zero JS**. `+` → `×` marker, green border + tint when open.
+    `.faq-item` was already in the scroll-reveal `SELS` list, so reveal works for free.
+  - Only new CSS = **Section 29 `.faq-heading`** (centring + 42px/30px type) + a mobile override.
+- **Facts are load-bearing — Zewn chose them, nothing invented:** turnaround = *"depends on scope, firm
+  timeline with the quote"* (no committed range); pricing = **fixed plain-English quote, never hourly**,
+  with an **optional flat monthly retainer after the build** (cancel anytime, no annual lock-in).
+  No headcount claims anywhere (Quantra is a one-person op behind a "one team" voice).
+- **FAQPage JSON-LD** emitted per page, mirroring the visible Q&A **verbatim** (Google requires the
+  schema to match what the user can see). Validated programmatically: visible questions/answers ==
+  schema questions/answers on all 6 pages, all JSON parses, all 10 pages well-formed, exactly one
+  `footer-bio` each.
+- **Verified:** accordion toggles (`open` false→true, answer 102px, border → `rgba(129,255,165,.25)`).
+  ⚠️ **Screenshot gotcha (reusable):** the claude-in-chrome automated tab only paints the top ~330px of
+  the viewport on this site — full-page shots come back mostly black below that. Verify layout via
+  `getComputedStyle`/`getBoundingClientRect` in `javascript_tool`, not by eye.
+- **⏳ Left over:** (1) `pages/automation.html:292` process card still says *"If we are a fit, **I** will
+  map out…"* — the last first-person leak in **body** copy (home's equivalent already says "we"). Not
+  touched: it's page copy, needs Zewn's word. (2) automation hero pill still blue→purple.
+  (3) Umami tracking script. (4) Resend domain verification pending → form still falls back to mailto.
+
 ## 2026-07-10 — SITE WENT LIVE + /contact upgraded to a real contact page
 
 Two things this session: the big refresh batch finally shipped to production, then `/contact` was

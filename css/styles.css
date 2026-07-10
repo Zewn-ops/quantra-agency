@@ -2267,6 +2267,18 @@ a.contact-info-card:hover .contact-info-value {
     font-size: 0.85em;
 }
 
+/* --- 29. FAQ HEADING (the .faq-* accordion itself lives in Section 19) --- */
+.faq-heading {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.faq-heading .empower-light,
+.faq-heading .empower-bold {
+    font-size: 42px;
+    line-height: 1.15;
+}
+
 /* --- 26. MOBILE RESPONSIVENESS --- */
 @media (max-width: 768px) {
 
@@ -2558,4 +2570,9 @@ a.contact-info-card:hover .contact-info-value {
     .contact-info-card { padding: 24px 20px !important; }
 
     .contact-info-value { font-size: 16px !important; }
+
+    .faq-heading .empower-light,
+    .faq-heading .empower-bold { font-size: 30px !important; }
+
+    .faq-heading { margin-bottom: 28px !important; }
 }
