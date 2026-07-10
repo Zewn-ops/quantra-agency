@@ -1,4 +1,7 @@
 {
+  "redirects": [
+    { "source": "/support", "destination": "/automation", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/automation", "destination": "/pages/automation.html" },
     { "source": "/design", "destination": "/pages/design.html" },
