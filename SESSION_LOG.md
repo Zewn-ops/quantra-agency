@@ -30,10 +30,19 @@ Format each entry as: ## YYYY-MM-DD — short title, then bullet points.
   ⚠️ **Screenshot gotcha (reusable):** the claude-in-chrome automated tab only paints the top ~330px of
   the viewport on this site — full-page shots come back mostly black below that. Verify layout via
   `getComputedStyle`/`getBoundingClientRect` in `javascript_tool`, not by eye.
-- **⏳ Left over:** (1) `pages/automation.html:292` process card still says *"If we are a fit, **I** will
-  map out…"* — the last first-person leak in **body** copy (home's equivalent already says "we"). Not
-  touched: it's page copy, needs Zewn's word. (2) automation hero pill still blue→purple.
-  (3) Umami tracking script. (4) Resend domain verification pending → form still falls back to mailto.
+- **✅ Both leftovers fixed same session (Zewn approved):**
+  - `pages/automation.html:292` — *"If we are a fit, **I** will map out…"* → **"we map out"**. Last
+    first-person-singular leak in body copy; every other `I` on the site is the *visitor* asking an FAQ
+    question, which is correct.
+  - **Automation hero pill** now takes the accent like the other two — `.svc-automation` added to the
+    Section 27 `.hero-highlight` rule. **⚠️ Also had to flip its text to `--bg-dark`:** the base pill is
+    `color: white`, and white on the green pill measures **1.54:1** (WCAG AA needs 4.5:1) — unreadable.
+    Dark text = **12.53:1**. Verified the rendered pill: `linear-gradient(90deg, rgba(129,255,165,.9), …)`
+    with `color: rgb(10,14,23)`.
+  - **⚠️ Noted, NOT changed:** white pill text on **web-dev blue = 4.17:1** and **design purple = 4.32:1**
+    — both marginally under AA. Fixing means changing how those two heroes look; Zewn's call.
+- **⏳ Left over:** (1) Umami tracking script. (2) Resend domain verification pending → live form still
+  falls back to mailto.
 
 ## 2026-07-10 — SITE WENT LIVE + /contact upgraded to a real contact page
 

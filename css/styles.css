@@ -2187,10 +2187,16 @@ body.svc-design {                     /* purple (brightened from process-purple 
     background-size: 1280px auto;
 }
 
-/* hero-highlight pill adopts the service accent (web-dev/design) */
+/* hero-highlight pill adopts the service accent on every service page */
+.svc-automation .hero-highlight,
 .svc-web-dev .hero-highlight,
 .svc-design .hero-highlight {
     background: linear-gradient(90deg, rgba(var(--accent-rgb), 0.9), rgba(var(--accent-rgb), 0.55));
+}
+
+/* green pill is light — flip the label to dark so it stays legible */
+.svc-automation .hero-highlight {
+    color: var(--bg-dark);
 }
 
 /* --- 28. CONTACT PAGE (hero + phone/email/location strip) --- */
