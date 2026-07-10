@@ -63,7 +63,7 @@ All pages share identical navbar + side menu + footer. Changes to these must be 
 - `pages/terms.html`
 - `pages/cookies.html`
 
-> IT Support page was removed (2026-06-27). The side-menu "Automation" entry is now an active link → `/automation` (no longer disabled). "Coming Soon" stays disabled.
+> IT Support page was removed (2026-06-27). The side-menu "Automation" entry is now an active link → `/automation` (no longer disabled). The "Coming Soon" placeholder was removed (2026-07-10) — the side menu now has **6 links, no disabled entries**. The `.terminal-link.disabled` + `.blink` CSS is kept (unused) so a future placeholder needs no new styles; the `:hover:not(.disabled)` guards still reference it.
 
 Side menu `active-link` mapping:
 - `index.html` → Home
@@ -74,7 +74,7 @@ Side menu `active-link` mapping:
 - `contact.html` → Book a Call
 - All others → none
 
-> About page added 2026-06-30 (menu order: Home · Web Development · Branding & Design · Automation · **About** · Coming Soon (disabled) · Book a Call). Sources: `about` / `about-mid` / `about-final` (thank-you back-button case in `main.js`).
+> About page added 2026-06-30. Menu order: Home · Web Development · Branding & Design · Automation · **About** · Book a Call. Sources: `about` / `about-mid` / `about-final` (thank-you back-button case in `main.js`).
 
 ## JavaScript (js/main.js)
 Single file. Sections delimited by `// --- N. NAME ---` comments.

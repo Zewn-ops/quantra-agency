@@ -3,6 +3,21 @@
 Running log of meaningful changes. Newest entries at the top.
 Format each entry as: ## YYYY-MM-DD — short title, then bullet points.
 
+## 2026-07-10 (last) — removed the "Coming Soon" side-menu placeholder (branch `feature/remove-coming-soon`)
+
+- Deleted the disabled `<div class="terminal-link disabled">Coming Soon</div>` from the side menu on
+  **all 10 pages**. Menu is now **6 live links**, no disabled entries: Home · Web Development ·
+  Branding & Design · Automation · About · Book a Call.
+- **CSS deliberately left in place** — `.terminal-link.disabled` and `.blink` are now unused, but the
+  `.terminal-link:hover:not(.disabled)` guards still reference `.disabled`, and stripping it from those
+  selectors would lower their specificity and change the cascade. Keeping the rules also means a future
+  placeholder needs no new styles. Nothing else in the HTML or `main.js` used either class (`main.js`'s
+  `disabled` hits are the submit-button DOM property).
+- **Verified:** all 10 pages well-formed, exactly 6 `terminal-link` anchors each, `active-link` count
+  correct (1 on nav pages, 0 on legal/thank-you); rendered the open menu in a real browser.
+- Docs updated: repo `CLAUDE.md` + vault `business/quantra-digital/CLAUDE.md` both described the menu
+  as containing a disabled "Coming Soon" entry.
+
 ## 2026-07-10 (later) — per-page footer bios + FAQ sections on 6 pages (branch `feature/footer-faq`)
 
 - **🔴 Fixed the stale footer-bio bug** (open since 06-30). 8 of 10 pages carried a leftover CTA
