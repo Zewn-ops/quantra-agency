@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
         illustrator: { prompt: ">_ Executing: launch_illustrator.ai", text: "Adobe Illustrator is our vector workhorse — it's where every logo, icon, and infinitely scalable identity element lives. Industry standard for a reason." },
         photoshop:   { prompt: ">_ Executing: launch_photoshop.psd", text: "Photoshop handles the pixel-level work — composites, photo retouching, complex social graphics, and anything where raster meets vector." },
         indesign:    { prompt: ">_ Executing: launch_indesign.indd", text: "InDesign is where multi-page documents come to life — brand guidelines, pitch decks, brochures, magazines. Print-ready, properly typeset, no compromises." },
-        affinity:    { prompt: ">_ Executing: launch_affinity.afdesign", text: "Affinity Designer is our nimble alternative for vector work — fast, powerful, and a fresh take when Adobe feels heavy. Great for rapid concept exploration." },
+        affinity:    { prompt: ">_ Executing: launch_affinity.af", text: "Affinity is our all-in-one alternative to Adobe — vector, photo and layout work in one fast app, and a fresh take when Adobe feels heavy. Great for rapid concept exploration." },
         procreate:   { prompt: ">_ Executing: launch_procreate.ipad", text: "Procreate on iPad is where rough concepts get sketched fast. Hand-drawn marks, illustrative ideas, anything that benefits from getting away from the cursor." },
         canva:       { prompt: ">_ Executing: launch_canva.web", text: "Canva is the right tool for one specific job: handing clients editable templates they can update themselves. We build the master, they do the variations." },
 
